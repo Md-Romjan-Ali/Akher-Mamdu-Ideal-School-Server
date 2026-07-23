@@ -48,7 +48,6 @@ async function run() {
         // teacher start
         app.post('/api/poststudent', async (req, res) => {
             const corsor = req.body;
-            console.log(corsor);
             const result = await teacherCollection.insertOne(corsor)
             res.send(result)
         })
@@ -60,6 +59,22 @@ async function run() {
             const { id } = req.params
             const query = { _id: new ObjectId(id) }
             const result = await teacherCollection.findOne(query)
+            res.send(result)
+        })
+        app.delete('/api/deletestudent/:id', async (req, res) => {
+            const { id } = req.params
+            const query = { _id: new ObjectId(id) }
+            const result = await teacherCollection.deleteOne(query)
+            res.send(result)
+        })
+        app.patch('/api/updateteacher/:id', async (req, res) => {
+            const { id } = req.params;
+            const query = { _id: new ObjectId(id) }
+            const update = req.body
+            const result = await teacherCollection.updateOne(
+                query,
+                { $set: update }
+            )
             res.send(result)
         })
         // techer end
