@@ -23,9 +23,11 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
         const db = client.db("AMISchool");
         const studentCollection = db.collection('Students')
+        const teacherCollection = db.collection("Teachers")
+        // student start
         app.post('/api/postallstudent', async (req, res) => {
             const corsur = req.body;
             const result = await studentCollection.insertOne(corsur)
@@ -42,6 +44,25 @@ async function run() {
             const result = await studentCollection.findOne(query)
             res.send(result)
         })
+        // student endt
+        // teacher start
+        app.post('/api/poststudent', async (req, res) => {
+            const corsor = req.body;
+            console.log(corsor);
+            const result = await teacherCollection.insertOne(corsor)
+            res.send(result)
+        })
+        app.get('/api/getteacher', async (req, res) => {
+            const result = await teacherCollection.find().toArray()
+            res.send(result)
+        })
+        app.get('/api/teacherdetails/:id', async (req, res) => {
+            const { id } = req.params
+            const query = { _id: new ObjectId(id) }
+            const result = await teacherCollection.findOne(query)
+            res.send(result)
+        })
+        // techer end
         // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
