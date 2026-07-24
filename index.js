@@ -44,6 +44,12 @@ async function run() {
             const result = await studentCollection.findOne(query)
             res.send(result)
         })
+        app.delete('/api/deletestudent/:id', async (req, res) => {
+            const { id } = req.params;
+            const query = { _id: new ObjectId(id) }
+            const result = await studentCollection.deleteOne(query)
+            res.send(result)
+        })
         // student endt
         // teacher start
         app.post('/api/poststudent', async (req, res) => {
