@@ -25,8 +25,30 @@ async function run() {
     try {
         // await client.connect();
         const db = client.db("AMISchool");
+        const userCollection = db.collection('user')
         const studentCollection = db.collection('Students')
         const teacherCollection = db.collection("Teachers")
+        // user start
+        app.get('/api/alluser', async (req, res) => {
+            const result = await userCollection.find().toArray()
+            res.send(result)
+        })
+        app.patch('/api/updateuesr/:id', async (req, res) => {
+            const { id } = req.params
+            const update = req.body;
+            const result = await userCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: update }
+            )
+            res.send(result)
+        })
+        app.delete('/api/deleteuser/:id', async (req, res) => {
+            const { id } = req.params;
+            const query = { _id: new ObjectId(id) }
+            const result = await userCollection.deleteOne(query)
+            res.send(result)
+        })
+        // user end
         // student start
         app.post('/api/postallstudent', async (req, res) => {
             const corsur = req.body;
@@ -67,7 +89,7 @@ async function run() {
             const result = await teacherCollection.findOne(query)
             res.send(result)
         })
-        app.delete('/api/deletestudent/:id', async (req, res) => {
+        app.delete('/api/deleteteacher/:id', async (req, res) => {
             const { id } = req.params
             const query = { _id: new ObjectId(id) }
             const result = await teacherCollection.deleteOne(query)
