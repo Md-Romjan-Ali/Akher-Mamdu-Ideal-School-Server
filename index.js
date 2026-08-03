@@ -28,6 +28,8 @@ async function run() {
         const userCollection = db.collection('user')
         const studentCollection = db.collection('Students')
         const teacherCollection = db.collection("Teachers")
+        const teacherRoutineCollection = db.collection("TeacherRoutine")
+        const studentResultCollection = db.collection("StudentResult")
         // user start
         app.get('/api/alluser', async (req, res) => {
             const result = await userCollection.find().toArray()
@@ -72,6 +74,12 @@ async function run() {
             const result = await studentCollection.deleteOne(query)
             res.send(result)
         })
+        // add student result
+        app.post('/api/poststudentresult', async (req, res) => {
+            const corsor = req.body;
+            const result = await studentResultCollection.insertOne(corsor)
+            res.send(result)
+        })
         // student endt
         // teacher start
         app.post('/api/poststudent', async (req, res) => {
@@ -105,7 +113,21 @@ async function run() {
             )
             res.send(result)
         })
-        // techer end
+        // teacher routine
+        app.post('/api/postteacherroutine', async (req, res) => {
+            const corsor = req.body;
+            const result = await teacherRoutineCollection.insertOne(corsor)
+            res.send(result)
+        })
+        app.get('/api/getteacherroutine', async (req, res) => {
+            const query = {}
+            if (req.query.teacherEmail) {
+                query.teacherEmail = req.query.teacherEmail
+            }
+            const result = await teacherRoutineCollection.find(query).toArray()
+            res.send(result)
+        })
+        // teacher end
         // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
