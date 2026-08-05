@@ -80,6 +80,14 @@ async function run() {
             const result = await studentResultCollection.insertOne(corsor)
             res.send(result)
         })
+        app.get('/api/studentresult', async (req, res) => {
+            const query = {}
+            if (req.query.email) {
+                query.email = req.query.email
+            }
+            const result = await studentResultCollection.find(query).toArray()
+            res.send(result)
+        })
         // student endt
         // teacher start
         app.post('/api/poststudent', async (req, res) => {
