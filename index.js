@@ -30,6 +30,7 @@ async function run() {
         const teacherCollection = db.collection("Teachers")
         const teacherRoutineCollection = db.collection("TeacherRoutine")
         const studentResultCollection = db.collection("StudentResult")
+        const earnCollection = db.collection("Earn") 
         // user start
         app.get('/api/alluser', async (req, res) => {
             const result = await userCollection.find().toArray()
@@ -136,6 +137,13 @@ async function run() {
             res.send(result)
         })
         // teacher end
+        // earn and cost start
+app.post('/api/postearn', async(req,res)=>{
+    const corsor=req.body
+    const result=await earnCollection.insertOne(corsor)
+    res.send(result)
+})
+        // earn and cost end
         // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
